@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "publish:blog": "./scripts/publish-blog.sh",
+    "publish:blog:archive": "./scripts/publish-blog.sh --archive",
     "publish:blog:dry": "./scripts/publish-blog.sh --dry-run",
     "astro": "astro"
   },

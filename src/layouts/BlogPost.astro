@@ -126,10 +126,10 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
 
   .post-layout {
     display: flex;
-    gap: 3rem;
+    gap: 2rem;
     justify-content: center;
     align-items: start;
-    max-width: 960px;
+    max-width: var(--max-width-wide);
     margin: 0 auto;
   }
 
@@ -140,7 +140,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
   }
 
   .post-sidebar {
-    width: 200px;
+    width: 160px;
     flex-shrink: 0;
     position: sticky;
     top: 80px;
@@ -271,18 +271,18 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
 
   /* ── Table of Contents — Desktop Sidebar ── */
   .toc-desktop {
-    font-size: 0.85rem;
-    border-left: 2px solid var(--border-light);
-    padding-left: 1rem;
+    font-size: 0.78rem;
+    border-left: 1px solid var(--border);
+    padding-left: 0.75rem;
   }
 
   .toc-desktop .toc-label {
-    font-size: 0.72rem;
+    font-size: 0.62rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     color: var(--text-tertiary);
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.6rem;
   }
 
   .toc-list {
@@ -292,12 +292,12 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
   }
 
   .toc-item {
-    padding: 0.2em 0;
-    line-height: 1.4;
+    padding: 0.15em 0;
+    line-height: 1.3;
   }
 
   .toc-item--h3 {
-    padding-left: 1em;
+    padding-left: 0.75em;
   }
 
   .toc-link {
