@@ -58,6 +58,11 @@ const recentPosts = posts.slice(0, 5);
 </html>
 
 <style>
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
   .hero {
     text-align: center;
     padding: 4rem 0 3rem;
@@ -69,6 +74,7 @@ const recentPosts = posts.slice(0, 5);
     justify-content: center;
     gap: 0.75rem;
     margin-bottom: 2rem;
+    animation: fade-in 0.6s ease both;
   }
 
   .ornament-line {
@@ -95,6 +101,7 @@ const recentPosts = posts.slice(0, 5);
     line-height: 1.1;
     margin: 0 0 0.75rem;
     color: var(--text);
+    animation: fade-in 0.6s ease 0.1s both;
   }
 
   .hero-description {
