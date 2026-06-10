@@ -6,6 +6,8 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
@@ -36,7 +38,7 @@ const recentPosts = posts.slice(0, 5);
           <ul class="post-list">
             {recentPosts.map((post) => (
               <li class="post-item">
-                <a href={`/blog/${post.id}/`} class="post-link">
+                <a href={`${base}blog/${post.id}/`} class="post-link">
                   <span class="post-date">
                     <FormattedDate date={post.data.pubDate} />
                   </span>
@@ -46,7 +48,7 @@ const recentPosts = posts.slice(0, 5);
             ))}
           </ul>
           {posts.length > 5 && (
-            <a href="/blog" class="view-all">View all posts &rarr;</a>
+            <a href={`${base}blog`} class="view-all">View all posts &rarr;</a>
           )}
         </section>
       )}

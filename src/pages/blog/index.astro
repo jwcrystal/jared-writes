@@ -6,6 +6,8 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
@@ -32,7 +34,7 @@ const posts = (await getCollection('blog')).sort(
         <ul class="post-list">
           {posts.map((post) => (
             <li class="post-item">
-              <a href={`/blog/${post.id}/`} class="post-link">
+              <a href={`${base}blog/${post.id}/`} class="post-link">
                 <div class="post-meta">
                   <time class="post-date" datetime={post.data.pubDate.toISOString()}>
                     <FormattedDate date={post.data.pubDate} />
