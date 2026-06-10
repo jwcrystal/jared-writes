@@ -12,9 +12,29 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await render(post);
+
+// Get all posts sorted by date to find prev/next
+const allPosts = await getCollection('blog');
+const sorted = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const currentIndex = sorted.findIndex((p) => p.id === post.id);
+
+const prevPost = currentIndex < sorted.length - 1
+	? { title: sorted[currentIndex + 1].data.title, slug: sorted[currentIndex + 1].id }
+	: null;
+
+const nextPost = currentIndex > 0
+	? { title: sorted[currentIndex - 1].data.title, slug: sorted[currentIndex - 1].id }
+	: null;
+
+const { Content, headings } = await render(post);
 ---
 
-<BlogPost {...post.data}>
+<BlogPost
+	{...post.data}
+	tags={post.data.tags}
+	prevPost={prevPost}
+	nextPost={nextPost}
+	headings={headings}
+>
 	<Content />
 </BlogPost>

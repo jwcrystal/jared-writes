@@ -5,12 +5,23 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import Tags from '../components/Tags.astro';
 
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: ReturnType<CollectionEntry<'blog'>['data']['heroImage']>;
+  tags?: string[];
+  prevPost?: { title: string; slug: string } | null;
+  nextPost?: { title: string; slug: string } | null;
+  headings?: { depth: number; slug: string; text: string }[];
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nextPost, headings } = Astro.props;
 ---
 
 <!doctype html>
@@ -36,6 +47,11 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
           {description && (
             <p class="post-subtitle">{description}</p>
           )}
+          {tags && tags.length > 0 && (
+            <div class="post-tags">
+              <Tags tags={tags} size="md" />
+            </div>
+          )}
         </header>
 
         {heroImage && (
@@ -44,10 +60,42 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
           </div>
         )}
 
+        {headings && headings.length > 1 && (
+          <nav class="toc" aria-label="Table of contents">
+            <details open>
+              <summary class="toc-label">On this page</summary>
+              <ul class="toc-list">
+                {headings.filter(h => h.depth <= 3).map((h) => (
+                  <li class={`toc-item toc-item--h${h.depth}`}>
+                    <a href={`#${h.slug}`} class="toc-link">{h.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </nav>
+        )}
+
         <div class="prose">
           <slot />
         </div>
       </article>
+
+      {(prevPost || nextPost) && (
+        <nav class="post-nav" aria-label="Previous and next posts">
+          {prevPost ? (
+            <a href={`${base}blog/${prevPost.slug}/`} class="post-nav-link post-nav-prev">
+              <span class="post-nav-direction">&larr; Previous</span>
+              <span class="post-nav-title">{prevPost.title}</span>
+            </a>
+          ) : <span />}
+          {nextPost ? (
+            <a href={`${base}blog/${nextPost.slug}/`} class="post-nav-link post-nav-next">
+              <span class="post-nav-direction">Next &rarr;</span>
+              <span class="post-nav-title">{nextPost.title}</span>
+            </a>
+          ) : <span />}
+        </nav>
+      )}
     </main>
     <Footer />
   </body>
@@ -145,6 +193,101 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
     margin: 1.5em 0;
   }
 
+  /* ── Tags ── */
+  .post-tags {
+    margin: 1.25rem 0 0;
+  }
+
+  /* ── Table of Contents ── */
+  .toc {
+    margin-bottom: 2.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--accent-subtle);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.88rem;
+  }
+
+  .toc-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+  }
+
+  .toc-item {
+    padding: 0.15em 0;
+  }
+
+  .toc-item--h3 {
+    padding-left: 1.25em;
+  }
+
+  .toc-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .toc-link:hover {
+    color: var(--accent);
+  }
+
+  /* ── Previous / Next Navigation ── */
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    padding: 0.75rem;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+  }
+
+  .post-nav-link:hover {
+    background: var(--accent-subtle);
+  }
+
+  .post-nav-next {
+    text-align: right;
+  }
+
+  .post-nav-direction {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+  }
+
+  .post-nav-title {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.4;
+    transition: color 0.15s ease;
+  }
+
+  .post-nav-link:hover .post-nav-title {
+    color: var(--accent);
+  }
+
   @media (max-width: 640px) {
     .post {
       padding-top: 1.5rem;
@@ -156,6 +299,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
     .prose {
       font-size: 1rem;
+    }
+
+    .post-nav {
+      grid-template-columns: 1fr;
     }
   }
 </style>

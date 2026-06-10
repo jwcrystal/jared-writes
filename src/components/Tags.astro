@@ -1,0 +1,55 @@
+---
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+
+interface Props {
+  tags: string[];
+  size?: 'sm' | 'md';
+}
+
+const { tags, size = 'sm' } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <ul class:list={['tag-list', `tag-list--${size}`]} aria-label="Tags">
+    {tags.map((tag) => (
+      <li>
+        <a href={`${base}tags/${tag}`} class="tag">{tag}</a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .tag-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    display: inline-flex;
+    padding: 0.2em 0.6em;
+    font-size: 0.78rem;
+    font-family: var(--font-body);
+    color: var(--accent);
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-light);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+    line-height: 1.5;
+  }
+
+  .tag:hover {
+    background: var(--accent-light);
+    color: var(--accent-hover);
+  }
+
+  .tag-list--md .tag {
+    font-size: 0.85rem;
+    padding: 0.25em 0.75em;
+  }
+</style>

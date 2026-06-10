@@ -4,33 +4,59 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import Tags from '../../components/Tags.astro';
+import { SITE_TITLE } from '../../consts';
 
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const tagSet = new Set<string>();
+  for (const post of posts) {
+    if (post.data.tags) {
+      for (const tag of post.data.tags) {
+        tagSet.add(tag);
+      }
+    }
+  }
+  return [...tagSet].map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+type Props = {
+  tag: string;
+};
+
+const { tag } = Astro.props;
+
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter((post) => post.data.tags?.includes(tag))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={`Blog — ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <BaseHead title={`#${tag} — ${SITE_TITLE}`} description={`Posts tagged with "${tag}"`} />
   </head>
   <body>
     <Header />
     <main>
       <header class="page-header">
-        <h1>Blog</h1>
+        <p class="breadcrumb">
+          <a href={`${base}tags`}>Tags</a> &rarr;
+        </p>
+        <h1># {tag}</h1>
         <p class="page-description">
-          Thoughts on code, books, and things worth thinking about.
+          {posts.length} {posts.length === 1 ? 'post' : 'posts'}
         </p>
       </header>
 
       {posts.length === 0 ? (
-        <p class="empty">No posts yet. Check back soon.</p>
+        <p class="empty">No posts with this tag.</p>
       ) : (
         <ul class="post-list">
           {posts.map((post) => (
@@ -45,11 +71,6 @@ const posts = (await getCollection('blog')).sort(
                   <h2 class="post-title">{post.data.title}</h2>
                   {post.data.description && (
                     <p class="post-description">{post.data.description}</p>
-                  )}
-                  {post.data.tags && post.data.tags.length > 0 && (
-                    <div class="post-tags">
-                      <Tags tags={post.data.tags} />
-                    </div>
                   )}
                 </div>
               </a>
@@ -67,16 +88,30 @@ const posts = (await getCollection('blog')).sort(
     margin-bottom: 2.5rem;
   }
 
+  .breadcrumb {
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    margin: 0 0 0.75rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-tertiary);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent);
+  }
+
   .page-header h1 {
     font-family: var(--font-heading);
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-weight: normal;
-    letter-spacing: -0.02em;
     margin: 0 0 0.5rem;
   }
 
   .page-description {
-    font-size: 1.05rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
     margin: 0;
   }
@@ -138,17 +173,13 @@ const posts = (await getCollection('blog')).sort(
   .post-description {
     font-size: 0.92rem;
     color: var(--text-secondary);
-    margin: 0 0 0.5rem;
+    margin: 0;
     line-height: 1.5;
-  }
-
-  .post-tags {
-    margin-top: 0.5rem;
   }
 
   @media (max-width: 640px) {
     .page-header h1 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
 
     .post-link {

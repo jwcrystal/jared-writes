@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+
+const posts = await getCollection('blog');
+
+// Collect all tags with counts
+const tagMap = new Map<string, number>();
+for (const post of posts) {
+  if (post.data.tags) {
+    for (const tag of post.data.tags) {
+      tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+    }
+  }
+}
+
+const tags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Tags — ${SITE_TITLE}`} description="Browse posts by tag" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <header class="page-header">
+        <h1>Tags</h1>
+        <p class="page-description">
+          Browse posts by topic
+        </p>
+      </header>
+
+      {tags.length === 0 ? (
+        <p class="empty">No tags yet.</p>
+      ) : (
+        <ul class="tag-cloud">
+          {tags.map(([tag, count]) => (
+            <li class="tag-item">
+              <a href={`${base}tags/${tag}/`} class="tag-link">
+                <span class="tag-name">{tag}</span>
+                <span class="tag-count">{count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+  }
+
+  .page-description {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .empty {
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+
+  .tag-cloud {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .tag-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-light);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .tag-link:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+
+  .tag-name {
+    font-size: 0.95rem;
+    color: var(--accent);
+    transition: color 0.15s ease;
+  }
+
+  .tag-link:hover .tag-name {
+    color: var(--accent-hover);
+  }
+
+  .tag-count {
+    font-size: 0.78rem;
+    color: var(--text-tertiary);
+    background: var(--bg);
+    padding: 0.1em 0.45em;
+    border-radius: 10px;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 640px) {
+    .page-header h1 {
+      font-size: 1.8rem;
+    }
+
+    .tag-cloud {
+      gap: 0.5rem;
+    }
+
+    .tag-link {
+      padding: 0.3rem 0.75rem;
+    }
+  }
+</style>
