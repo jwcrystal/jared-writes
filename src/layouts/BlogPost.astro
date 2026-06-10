@@ -11,76 +11,149 @@ type Props = CollectionEntry<'blog'>['data'];
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+  <head>
+    <BaseHead title={`${title} — Jared Writes`} description={description} />
+  </head>
+  <body>
+    <Header />
+    <main class="post">
+      <article>
+        <header class="post-header">
+          <a href="/blog" class="back-link">&larr; All posts</a>
+          <div class="post-meta">
+            <FormattedDate date={pubDate} />
+            {updatedDate && (
+              <span class="updated">
+                &middot; Updated <FormattedDate date={updatedDate} />
+              </span>
+            )}
+          </div>
+          <h1 class="post-title">{title}</h1>
+          {description && (
+            <p class="post-subtitle">{description}</p>
+          )}
+        </header>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+        {heroImage && (
+          <div class="hero-image">
+            <Image width={680} height={340} src={heroImage} alt="" />
+          </div>
+        )}
+
+        <div class="prose">
+          <slot />
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
 </html>
+
+<style>
+  .post {
+    padding-top: 2rem;
+  }
+
+  .post-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: color 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .post-meta {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .updated {
+    color: var(--text-tertiary);
+  }
+
+  .post-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0 0 0.5rem;
+    color: var(--text);
+  }
+
+  .post-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .hero-image {
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .prose {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .prose :global(h1) { font-size: 1.8em; }
+  .prose :global(h2) { font-size: 1.45em; }
+  .prose :global(h3) { font-size: 1.2em; }
+  .prose :global(h4) { font-size: 1.05em; }
+
+  .prose :global(p) {
+    margin-bottom: 1.5em;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-bottom: 1.5em;
+  }
+
+  .prose :global(blockquote) {
+    margin: 2em 0;
+  }
+
+  .prose :global(hr) {
+    margin: 2.5em 0;
+  }
+
+  .prose :global(img) {
+    margin: 1.5em 0;
+  }
+
+  @media (max-width: 640px) {
+    .post {
+      padding-top: 1.5rem;
+    }
+
+    .post-title {
+      font-size: 1.7rem;
+    }
+
+    .prose {
+      font-size: 1rem;
+    }
+  }
+</style>
