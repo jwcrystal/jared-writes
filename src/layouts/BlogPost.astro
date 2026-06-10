@@ -32,38 +32,59 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
   <body>
     <Header />
     <main class="post">
-      <article>
-        <header class="post-header">
-          <a href={`${base}blog`} class="back-link">&larr; All posts</a>
-          <div class="post-meta">
-            <FormattedDate date={pubDate} />
-            {updatedDate && (
-              <span class="updated">
-                &middot; Updated <FormattedDate date={updatedDate} />
-              </span>
+      <div class="post-layout">
+        <article class="post-article">
+          <header class="post-header">
+            <a href={`${base}blog`} class="back-link">&larr; All posts</a>
+            <div class="post-meta">
+              <FormattedDate date={pubDate} />
+              {updatedDate && (
+                <span class="updated">
+                  &middot; Updated <FormattedDate date={updatedDate} />
+                </span>
+              )}
+            </div>
+            <h1 class="post-title">{title}</h1>
+            {description && (
+              <p class="post-subtitle">{description}</p>
             )}
-          </div>
-          <h1 class="post-title">{title}</h1>
-          {description && (
-            <p class="post-subtitle">{description}</p>
-          )}
-          {tags && tags.length > 0 && (
-            <div class="post-tags">
-              <Tags tags={tags} size="md" />
+            {tags && tags.length > 0 && (
+              <div class="post-tags">
+                <Tags tags={tags} size="md" />
+              </div>
+            )}
+          </header>
+
+          {heroImage && (
+            <div class="hero-image">
+              <Image width={680} height={340} src={heroImage} alt="" />
             </div>
           )}
-        </header>
 
-        {heroImage && (
-          <div class="hero-image">
-            <Image width={680} height={340} src={heroImage} alt="" />
+          {headings && headings.length > 1 && (
+            <nav class="toc-mobile" aria-label="Table of contents">
+              <details>
+                <summary class="toc-label">On this page</summary>
+                <ul class="toc-list">
+                  {headings.filter(h => h.depth <= 3).map((h) => (
+                    <li class={`toc-item toc-item--h${h.depth}`}>
+                      <a href={`#${h.slug}`} class="toc-link">{h.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </nav>
+          )}
+
+          <div class="prose">
+            <slot />
           </div>
-        )}
+        </article>
 
-        {headings && headings.length > 1 && (
-          <nav class="toc" aria-label="Table of contents">
-            <details open>
-              <summary class="toc-label">On this page</summary>
+        {headings && headings.length >= 4 && (
+          <aside class="post-sidebar">
+            <nav class="toc-desktop">
+              <p class="toc-label">On this page</p>
               <ul class="toc-list">
                 {headings.filter(h => h.depth <= 3).map((h) => (
                   <li class={`toc-item toc-item--h${h.depth}`}>
@@ -71,14 +92,10 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
                   </li>
                 ))}
               </ul>
-            </details>
-          </nav>
+            </nav>
+          </aside>
         )}
-
-        <div class="prose">
-          <slot />
-        </div>
-      </article>
+      </div>
 
       {(prevPost || nextPost) && (
         <nav class="post-nav" aria-label="Previous and next posts">
@@ -102,10 +119,35 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
 </html>
 
 <style>
+  /* ── Layout ── */
   .post {
     padding-top: 2rem;
   }
 
+  .post-layout {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    align-items: start;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .post-article {
+    max-width: var(--max-width);
+    min-width: 0;
+    flex: 0 1 var(--max-width);
+  }
+
+  .post-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px;
+    padding-top: 0.5rem;
+  }
+
+  /* ── Article Header ── */
   .post-header {
     margin-bottom: 2.5rem;
   }
@@ -151,6 +193,12 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
     line-height: 1.5;
   }
 
+  /* ── Tags ── */
+  .post-tags {
+    margin: 1.25rem 0 0;
+  }
+
+  /* ── Hero ── */
   .hero-image {
     margin-bottom: 2.5rem;
   }
@@ -162,6 +210,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
     border-radius: 8px;
   }
 
+  /* ── Prose ── */
   .prose {
     font-size: 1.05rem;
     line-height: 1.75;
@@ -193,22 +242,18 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
     margin: 1.5em 0;
   }
 
-  /* ── Tags ── */
-  .post-tags {
-    margin: 1.25rem 0 0;
-  }
-
-  /* ── Table of Contents ── */
-  .toc {
-    margin-bottom: 2.5rem;
-    padding: 1rem 1.25rem;
+  /* ── Table of Contents — Mobile ── */
+  .toc-mobile {
+    display: none;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
     background: var(--accent-subtle);
     border: 1px solid var(--border);
     border-radius: 6px;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
   }
 
-  .toc-label {
+  .toc-mobile .toc-label {
     font-size: 0.78rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -218,22 +263,45 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
     user-select: none;
   }
 
-  .toc-list {
+  .toc-mobile .toc-list {
     list-style: none;
     padding: 0;
     margin: 0.75rem 0 0;
   }
 
+  /* ── Table of Contents — Desktop Sidebar ── */
+  .toc-desktop {
+    font-size: 0.85rem;
+    border-left: 2px solid var(--border-light);
+    padding-left: 1rem;
+  }
+
+  .toc-desktop .toc-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    margin: 0 0 0.75rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
   .toc-item {
-    padding: 0.15em 0;
+    padding: 0.2em 0;
+    line-height: 1.4;
   }
 
   .toc-item--h3 {
-    padding-left: 1.25em;
+    padding-left: 1em;
   }
 
   .toc-link {
-    color: var(--text-secondary);
+    color: var(--text-tertiary);
     text-decoration: none;
     transition: color 0.15s ease;
   }
@@ -247,7 +315,8 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    margin-top: 3.5rem;
+    max-width: var(--max-width);
+    margin: 3.5rem auto 0;
     padding-top: 2rem;
     border-top: 1px solid var(--border);
   }
@@ -286,6 +355,22 @@ const { title, description, pubDate, updatedDate, heroImage, tags, prevPost, nex
 
   .post-nav-link:hover .post-nav-title {
     color: var(--accent);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .post-layout {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .post-sidebar {
+      display: none;
+    }
+
+    .toc-mobile {
+      display: block;
+    }
   }
 
   @media (max-width: 640px) {
