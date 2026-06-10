@@ -4,9 +4,14 @@ import type { HTMLAttributes } from 'astro/types';
 type Props = HTMLAttributes<'a'>;
 
 const { href, class: className, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+const base = import.meta.env.BASE_URL || '/';
+const currentPath = Astro.url.pathname;
+
+// Extract relative path for comparison
+const currentRel = currentPath.replace(base, '').replace(/\/$/, '') || '/';
+const hrefRel = href.replace(base, '').replace(/\/$/, '') || '/';
+
+const isActive = currentRel === hrefRel;
 ---
 
 <a href={href} class:list={['nav-link', className, { active: isActive }]} {...props}>
