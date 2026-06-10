@@ -26,12 +26,14 @@ const nextPost = currentIndex > 0
 	? { title: sorted[currentIndex - 1].data.title, slug: sorted[currentIndex - 1].id }
 	: null;
 
+const tocDepth = post.data.tocDepth ?? 2;
 const { Content, headings } = await render(post);
 ---
 
 <BlogPost
 	{...post.data}
 	tags={post.data.tags}
+	tocDepth={tocDepth}
 	prevPost={prevPost}
 	nextPost={nextPost}
 	headings={headings}
