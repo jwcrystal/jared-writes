@@ -109,6 +109,9 @@ fi
 
 cd "$REPO_ROOT"
 
+echo "Converting Obsidian frontmatter to Astro schema..."
+node scripts/convert-frontmatter.mjs
+
 echo "Running Astro build check..."
 npm run build
 
@@ -139,5 +142,11 @@ if [[ "$ARCHIVE" == true ]]; then
       echo "Archived: $relative_path"
     done
 
-  find "$SOURCE_DIR" -mindepth 1 -type d -empty -delete
+  # NOTE: intentionally keeping empty subdirectories in SOURCE_DIR
+fi
+
+# Recreate SOURCE_DIR if iCloud pruned the empty directory after archiving
+if [[ ! -d "$SOURCE_DIR" ]]; then
+  mkdir -p "$SOURCE_DIR"
+  echo "Recreated empty source folder: $SOURCE_DIR"
 fi
