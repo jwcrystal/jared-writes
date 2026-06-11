@@ -24,7 +24,7 @@ Incrementally publish Markdown posts from Obsidian to the Astro blog.
 Options:
   --dry-run        Show what would be copied, without writing files or pushing
   --no-push        Commit changes locally but do not push to GitHub
-  --archive        Move published source posts from Ready to Published after push
+  --archive        Move published source posts from Ready to Published before sync
   -m, --message    Commit message (default: "publish: update blog posts")
   -h, --help       Show this help
 
@@ -68,14 +68,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ "$ARCHIVE" == true && "$PUSH" == false ]]; then
-  echo "--archive requires push to complete; remove --no-push or omit --archive." >&2
-  exit 1
-fi
+# Archive now happens before sync, so it's independent of --no-push
 
 if [[ ! -d "$SOURCE_DIR" ]]; then
-  echo "Source folder does not exist: $SOURCE_DIR" >&2
-  exit 1
+  mkdir -p "$SOURCE_DIR"
+  echo "Created empty source folder: $SOURCE_DIR"
 fi
 
 if [[ ! -d "$TARGET_DIR" ]]; then
@@ -83,24 +80,37 @@ if [[ ! -d "$TARGET_DIR" ]]; then
   exit 1
 fi
 
-echo "Source: $SOURCE_DIR"
-echo "Target: $TARGET_DIR"
-if [[ "$ARCHIVE" == true ]]; then
-  echo "Archive: $ARCHIVE_DIR"
-fi
-
 RSYNC_FLAGS=(-av --itemize-changes)
-if [[ "$DRY_RUN" == true ]]; then
-  RSYNC_FLAGS+=(-n)
+[[ "$DRY_RUN" == true ]] && RSYNC_FLAGS+=(-n)
+
+# Step 1: Consolidate Ready → Published (single source for blog sync)
+if [[ "$ARCHIVE" == true ]]; then
+  echo "Archiving source posts..."
+  mkdir -p "$ARCHIVE_DIR"
+  if [[ "$DRY_RUN" != true ]]; then
+    find "$SOURCE_DIR" -type f \( -name '*.md' -o -name '*.mdx' \) -print0 |
+      while IFS= read -r -d '' source_file; do
+        relative_path="${source_file#"$SOURCE_DIR/"}"
+        archive_file="$ARCHIVE_DIR/$relative_path"
+        mkdir -p "$(dirname "$archive_file")"
+        mv -f "$source_file" "$archive_file"
+        echo "  Archived: $relative_path"
+      done
+  else
+    echo "  [DRY RUN] Would move files from Ready to Published"
+  fi
+else
+  echo "Copying Ready → Published..."
+  rsync "${RSYNC_FLAGS[@]}" \
+    --include='*/' --include='*.md' --include='*.mdx' --exclude='*' \
+    "$SOURCE_DIR/" "$ARCHIVE_DIR/"
 fi
 
+# Step 2: Sync from Published → blog (single source of truth)
+echo "Syncing Published → blog..."
 rsync "${RSYNC_FLAGS[@]}" \
-  --include='*/' \
-  --include='*.md' \
-  --include='*.mdx' \
-  --exclude='*' \
-  "$SOURCE_DIR/" \
-  "$TARGET_DIR/"
+  --include='*/' --include='*.md' --include='*.mdx' --exclude='*' \
+  "$ARCHIVE_DIR/" "$TARGET_DIR/"
 
 if [[ "$DRY_RUN" == true ]]; then
   echo "Dry run complete. No files changed."
@@ -129,24 +139,8 @@ else
   echo "Committed locally. Skipped push because --no-push was set."
 fi
 
-if [[ "$ARCHIVE" == true ]]; then
-  echo "Archiving published source posts..."
-  mkdir -p "$ARCHIVE_DIR"
-
-  find "$SOURCE_DIR" -type f \( -name '*.md' -o -name '*.mdx' \) -print0 |
-    while IFS= read -r -d '' source_file; do
-      relative_path="${source_file#"$SOURCE_DIR/"}"
-      archive_file="$ARCHIVE_DIR/$relative_path"
-      mkdir -p "$(dirname "$archive_file")"
-      mv -f "$source_file" "$archive_file"
-      echo "Archived: $relative_path"
-    done
-
-  # NOTE: intentionally keeping empty subdirectories in SOURCE_DIR
-fi
-
-# Recreate SOURCE_DIR if iCloud pruned the empty directory after archiving
+# Ensure Ready/ exists for next use (iCloud may prune empty directories)
 if [[ ! -d "$SOURCE_DIR" ]]; then
   mkdir -p "$SOURCE_DIR"
-  echo "Recreated empty source folder: $SOURCE_DIR"
+  echo "Created empty source folder: $SOURCE_DIR"
 fi
