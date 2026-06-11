@@ -150,7 +150,7 @@ if [[ -d "$OBSIDIAN_VAULT" ]]; then
       else
         echo "  WARNING: Could not find image in vault: $img_decoded"
       fi
-    done < <(grep -oP '!\[.*?\]\([^)]+\)' "$md_file" || true)
+    done < <(grep -Eo '!\[[^]]*\]\([^)]+\)' "$md_file" || true)
   done < <(find "$TARGET_DIR" -name '*.md' -type f -print0)
 else
   echo "  Skipped (Obsidian vault not found at $OBSIDIAN_VAULT)"
