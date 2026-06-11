@@ -102,14 +102,22 @@ if [[ "$ARCHIVE" == true ]]; then
 else
   echo "Copying Ready → Published..."
   rsync "${RSYNC_FLAGS[@]}" \
-    --include='*/' --include='*.md' --include='*.mdx' --exclude='*' \
+    --include='*/' \
+    --include='*.md' --include='*.mdx' \
+    --include='*.png' --include='*.jpg' --include='*.jpeg' \
+    --include='*.gif' --include='*.svg' --include='*.webp' --include='*.avif' \
+    --exclude='*' \
     "$SOURCE_DIR/" "$ARCHIVE_DIR/"
 fi
 
 # Step 2: Sync from Published → blog (single source of truth)
 echo "Syncing Published → blog..."
 rsync "${RSYNC_FLAGS[@]}" \
-  --include='*/' --include='*.md' --include='*.mdx' --exclude='*' \
+  --include='*/' \
+  --include='*.md' --include='*.mdx' \
+  --include='*.png' --include='*.jpg' --include='*.jpeg' \
+  --include='*.gif' --include='*.svg' --include='*.webp' --include='*.avif' \
+  --exclude='*' \
   "$ARCHIVE_DIR/" "$TARGET_DIR/"
 
 if [[ "$DRY_RUN" == true ]]; then
