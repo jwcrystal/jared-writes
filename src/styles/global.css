@@ -12,7 +12,7 @@
 
   --text: #1c1c1c;
   --text-secondary: #5c5c5c;
-  --text-tertiary: #8a8a8a;
+  --text-tertiary: #6e6e6a;
 
   --bg: #fafaf8;
   --bg-elevated: #ffffff;
@@ -41,7 +41,7 @@
 
     --text: #e4e4e0;
     --text-secondary: #a0a09c;
-    --text-tertiary: #6e6e6a;
+    --text-tertiary: #858580;
 
     --bg: #141413;
     --bg-elevated: #1c1c1a;
@@ -100,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text);
   line-height: 1.3;
   letter-spacing: -0.01em;
-  margin-top: 2.5em;
+  margin-top: 2em;
   margin-bottom: 0.6em;
 }
 

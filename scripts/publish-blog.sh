@@ -14,6 +14,7 @@ COMMIT_MESSAGE="publish: update blog posts"
 DRY_RUN=false
 PUSH=true
 ARCHIVE=false
+FIX_DUPLICATE_H1=false
 
 usage() {
   cat <<'EOF'
@@ -25,6 +26,8 @@ Options:
   --dry-run        Show what would be copied, without writing files or pushing
   --no-push        Commit changes locally but do not push to GitHub
   --archive        Move published source posts from Ready to Published before sync
+  --fix-duplicate-h1
+                   Remove a leading H1 when it duplicates frontmatter title
   -m, --message    Commit message (default: "publish: update blog posts")
   -h, --help       Show this help
 
@@ -46,6 +49,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --archive)
       ARCHIVE=true
+      shift
+      ;;
+    --fix-duplicate-h1)
+      FIX_DUPLICATE_H1=true
       shift
       ;;
     -m|--message)
@@ -163,8 +170,11 @@ fi
 
 cd "$REPO_ROOT"
 
+CONVERT_ARGS=()
+[[ "$FIX_DUPLICATE_H1" == true ]] && CONVERT_ARGS+=(--fix-duplicate-h1)
+
 echo "Converting Obsidian frontmatter to Astro schema..."
-node scripts/convert-frontmatter.mjs
+node scripts/convert-frontmatter.mjs "${CONVERT_ARGS[@]}"
 
 echo "Running Astro build check..."
 npm run build

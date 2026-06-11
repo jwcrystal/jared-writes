@@ -1,14 +1,59 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
-<Layout
-	title="About"
-	description="About Jared Writes"
-	pubDate={new Date('2026-06-10')}
->
-	<p>
-		Writing about things I read, build, and think about.
-		Mostly tech, sometimes not.
-	</p>
-</Layout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`About — ${SITE_TITLE}`} description="About Jared Writes" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <header class="page-header">
+        <h1>About</h1>
+      </header>
+
+      <div class="about-copy">
+        <p>
+          Writing about things I read, build, and think about.
+          Mostly tech, sometimes not.
+        </p>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .about-copy {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  .about-copy p {
+    margin-bottom: 1.35em;
+  }
+
+  @media (max-width: 640px) {
+    .page-header h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>

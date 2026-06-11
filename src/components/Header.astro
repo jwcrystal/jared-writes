@@ -26,9 +26,9 @@ const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
   }
 
   .header-inner {
-    max-width: 960px;
+    width: min(1120px, calc(100% - 3rem));
+    max-width: 1120px;
     margin: 0 auto;
-    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -55,7 +55,7 @@ const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 
   @media (max-width: 640px) {
     .header-inner {
-      padding: 0 1.25rem;
+      width: calc(100% - 2.5rem);
     }
   }
 </style>

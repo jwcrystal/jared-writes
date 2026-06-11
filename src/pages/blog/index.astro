@@ -5,13 +5,14 @@ import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
-import Tags from '../../components/Tags.astro';
 
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const visibleTagCount = 3;
 ---
 
 <!doctype html>
@@ -32,7 +33,7 @@ const posts = (await getCollection('blog')).sort(
       {posts.length === 0 ? (
         <p class="empty">No posts yet. Check back soon.</p>
       ) : (
-        <ul class="post-list">
+        <ul class="post-list" aria-label="Blog posts">
           {posts.map((post) => (
             <li class="post-item">
               <a href={`${base}blog/${post.id}/`} class="post-link">
@@ -40,16 +41,27 @@ const posts = (await getCollection('blog')).sort(
                   <time class="post-date" datetime={post.data.pubDate.toISOString()}>
                     <FormattedDate date={post.data.pubDate} />
                   </time>
+                  {post.data.tags && post.data.tags.length > 0 && (
+                    <span class="post-meta-tags" aria-label={`Tags: ${post.data.tags.join(', ')}`}>
+                      {post.data.tags.slice(0, visibleTagCount).map((tag, index) => (
+                        <span class="post-meta-tag">
+                          {index > 0 && <span class="post-meta-separator" aria-hidden="true">·</span>}
+                          {tag}
+                        </span>
+                      ))}
+                      {post.data.tags.length > visibleTagCount && (
+                        <span class="post-meta-more">
+                          <span class="post-meta-separator" aria-hidden="true">·</span>
+                          +{post.data.tags.length - visibleTagCount}
+                        </span>
+                      )}
+                    </span>
+                  )}
                 </div>
                 <div class="post-content">
                   <h2 class="post-title">{post.data.title}</h2>
                   {post.data.description && (
                     <p class="post-description">{post.data.description}</p>
-                  )}
-                  {post.data.tags && post.data.tags.length > 0 && (
-                    <div class="post-tags">
-                      <Tags tags={post.data.tags} />
-                    </div>
                   )}
                 </div>
               </a>
@@ -64,7 +76,7 @@ const posts = (await getCollection('blog')).sort(
 
 <style>
   .page-header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
   .page-header h1 {
@@ -102,13 +114,15 @@ const posts = (await getCollection('blog')).sort(
 
   .post-link {
     display: block;
-    padding: 1.5rem 0;
+    padding: 1rem 0.75rem;
+    margin: 0 -0.75rem;
     text-decoration: none;
-    transition: transform 0.15s ease;
+    border-radius: 8px;
+    transition: background 0.2s ease;
   }
 
   .post-link:hover {
-    transform: translateX(4px);
+    background: var(--accent-subtle);
   }
 
   .post-link:hover .post-title {
@@ -116,22 +130,62 @@ const posts = (await getCollection('blog')).sort(
   }
 
   .post-meta {
-    margin-bottom: 0.35rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.2rem;
   }
 
   .post-date {
     font-size: 0.82rem;
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+
+  .post-meta-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .post-meta-tags::before {
+    content: '·';
+    color: var(--text-tertiary);
+  }
+
+  .post-meta-tag,
+  .post-meta-more {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--text-tertiary);
+  }
+
+  .post-meta-separator {
+    padding: 0 0.35rem;
+    color: var(--text-tertiary);
+  }
+
+  .post-link:hover .post-meta-tag,
+  .post-link:hover .post-meta-more {
+    color: var(--accent);
+  }
+
+  .post-content {
+    min-width: 0;
   }
 
   .post-title {
     font-family: var(--font-heading);
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: normal;
     color: var(--text);
     margin: 0 0 0.3rem;
-    line-height: 1.3;
+    line-height: 1.35;
     transition: color 0.15s ease;
   }
 
@@ -139,11 +193,7 @@ const posts = (await getCollection('blog')).sort(
     font-size: 0.92rem;
     color: var(--text-secondary);
     margin: 0 0 0.5rem;
-    line-height: 1.5;
-  }
-
-  .post-tags {
-    margin-top: 0.5rem;
+    line-height: 1.7;
   }
 
   @media (max-width: 640px) {
@@ -152,7 +202,8 @@ const posts = (await getCollection('blog')).sort(
     }
 
     .post-link {
-      padding: 1.25rem 0;
+      padding: 0.9rem 0.75rem;
+      margin: 0 -0.75rem;
     }
 
     .post-title {

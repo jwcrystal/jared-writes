@@ -17,8 +17,7 @@ Tech notes, reading reflections, and ideas.
 
 ## Workflow
 
-1. Write publish-ready `.md` or `.mdx` files in Obsidian:
-   `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault/30-Publish/Ready/`
+1. Write publish-ready `.md` or `.mdx` files in Obsidian.
 2. Run `npm run publish:blog:dry` to preview incremental sync changes.
 3. Run `npm run publish:blog` to sync, build, commit, and push.
    - Use `npm run publish:blog:archive` to also move successfully published source posts from `Ready/` to `Published/`.
