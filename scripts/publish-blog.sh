@@ -120,6 +120,42 @@ rsync "${RSYNC_FLAGS[@]}" \
   --exclude='*' \
   "$ARCHIVE_DIR/" "$TARGET_DIR/"
 
+# Step 3: Resolve missing referenced images from Obsidian vault
+# Obsidian stores images in vault paths like 20-Knowledge/{topic}/assets/{post}/file.png
+# but markdown references them as assets/{post}/file.png (relative to file location)
+OBSIDIAN_VAULT="$(dirname "$(dirname "$SOURCE_DIR")")"
+
+if [[ -d "$OBSIDIAN_VAULT" ]]; then
+  echo "Resolving missing blog images..."
+  while IFS= read -r -d '' md_file; do
+    while IFS= read -r match; do
+      img_rel=$(echo "$match" | sed 's/.*(\(.*\))/\1/')
+      img_decoded=$(python3 -c "import urllib.parse; print(urllib.parse.unquote('$img_rel'))" 2>/dev/null || echo "$img_rel")
+      # Skip external URLs
+      [[ "$img_decoded" =~ ^https?:// ]] && continue
+      md_dir=$(dirname "$md_file")
+      expected_path="$md_dir/$img_decoded"
+      [[ -f "$expected_path" ]] && continue
+      # Search vault for the image by filename
+      img_name=$(basename "$img_decoded")
+      found=$(find "$OBSIDIAN_VAULT" -name "$img_name" -type f 2>/dev/null | head -1)
+      if [[ -n "$found" ]]; then
+        if [[ "$DRY_RUN" == true ]]; then
+          echo "  [DRY RUN] Would copy image: $img_decoded"
+        else
+          mkdir -p "$(dirname "$expected_path")"
+          cp "$found" "$expected_path"
+          echo "  Copied image: $img_decoded"
+        fi
+      else
+        echo "  WARNING: Could not find image in vault: $img_decoded"
+      fi
+    done < <(grep -oP '!\[.*?\]\([^)]+\)' "$md_file" || true)
+  done < <(find "$TARGET_DIR" -name '*.md' -type f -print0)
+else
+  echo "  Skipped (Obsidian vault not found at $OBSIDIAN_VAULT)"
+fi
+
 if [[ "$DRY_RUN" == true ]]; then
   echo "Dry run complete. No files changed."
   exit 0
