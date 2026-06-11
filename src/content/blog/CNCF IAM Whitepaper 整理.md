@@ -20,14 +20,14 @@ related: []
 pubDate: 2026-06-09T00:00:00.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
-# CNCF IAM Whitepaper 整理
+
 
 > CNCF TAG Security and Compliance 發佈於 2026-06，39 頁。
 > 提供 Kubernetes 環境中認證（Authentication）與授權（Authorization）的實務指引，提出兩套參考架構（Basic / Advanced Pattern）。
 
 ---
 
-## 📄 文件概覽
+## 文件概覽
 
 | 項目 | 內容 |
 |------|------|
@@ -39,7 +39,7 @@ updatedDate: 2026-06-09T16:00:00.000Z
 
 ---
 
-## 🧠 核心主旨
+## 核心主旨
 
 以 RFC 2119 的 MUST / SHOULD / MAY 語言，為 K8s 環境定義 IAM 實作要求：
 
@@ -71,7 +71,7 @@ updatedDate: 2026-06-09T16:00:00.000Z
 
 ---
 
-## 📐 兩種 Use Case
+## 兩種 Use Case
 
 | Use Case | 描述 | 典型場景 |
 |----------|------|----------|
@@ -80,7 +80,7 @@ updatedDate: 2026-06-09T16:00:00.000Z
 
 ---
 
-## 🏗️ 兩種 Pattern 比較
+## 兩種 Pattern 比較
 
 | 面向 | Basic Pattern | Advanced Pattern |
 |------|---------------|------------------|
@@ -120,7 +120,7 @@ updatedDate: 2026-06-09T16:00:00.000Z
 
 ---
 
-## ⚙️ 關鍵 Requirements
+## 關鍵 Requirements
 
 ### Common（所有模式適用）
 
@@ -166,7 +166,7 @@ updatedDate: 2026-06-09T16:00:00.000Z
 
 ---
 
-## 🔐 隱私原則
+## 隱私原則
 
 - **資料最小化：** `sub` claim 使用不透明 ID，避免 PII
 - **目的限制：** 身份資訊僅用於認證、授權、稽核
@@ -175,7 +175,7 @@ updatedDate: 2026-06-09T16:00:00.000Z
 
 ---
 
-## 📚 參考資源
+## 參考資源
 
 - **CNCF IAM Whitepaper PDF** — [Identity and Access Management Whitepaper](https://www.cncf.io/wp-content/uploads/2026/06/Identity-and-Access-Management-Whitepaper.pdf)（CNCF TAG Security and Compliance, 2026）
 - [Microsoft Learn - IAM Core Concepts](https://learn.microsoft.com/en-us/entra/fundamentals/identity-fundamental-concepts)
