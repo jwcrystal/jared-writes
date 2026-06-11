@@ -112,16 +112,16 @@ const hasToc = tocHeadings.length >= 2;
         <nav class="post-nav" aria-label="Previous and next posts">
           {prevPost ? (
             <a href={`${base}blog/${prevPost.slug}/`} class="post-nav-link post-nav-prev">
-              <span class="post-nav-direction">&larr; Previous</span>
+              <span class="post-nav-direction">&larr; 上一篇</span>
               <span class="post-nav-title">{prevPost.title}</span>
             </a>
-          ) : <span />}
+          ) : null}
           {nextPost ? (
             <a href={`${base}blog/${nextPost.slug}/`} class="post-nav-link post-nav-next">
-              <span class="post-nav-direction">Next &rarr;</span>
+              <span class="post-nav-direction">下一篇 &rarr;</span>
               <span class="post-nav-title">{nextPost.title}</span>
             </a>
-          ) : <span />}
+          ) : null}
         </nav>
       )}
     </main>
@@ -356,7 +356,12 @@ const hasToc = tocHeadings.length >= 2;
     background: var(--accent-subtle);
   }
 
+  .post-nav-prev {
+    grid-column: 1;
+  }
+
   .post-nav-next {
+    grid-column: 2;
     text-align: right;
   }
 
@@ -409,6 +414,11 @@ const hasToc = tocHeadings.length >= 2;
 
     .post-nav {
       grid-template-columns: 1fr;
+    }
+
+    .post-nav-prev,
+    .post-nav-next {
+      grid-column: 1;
     }
   }
 </style>
