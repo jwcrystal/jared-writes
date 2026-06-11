@@ -3,8 +3,8 @@ title: Stack Auth：開源身份認證方案評測
 description: >-
   Stack Auth 的系統架構圖：基於 Next.js 的 Dashboard + Backend + PostgreSQL，整合
   OAuth、Email、Webhook 服務的開源認證方案。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - stack-auth
   - authentication
@@ -12,8 +12,6 @@ tags:
   - oauth
   - architecture
 source: ''
-publish_target: ''
-published_url: ''
 related: []
 pubDate: 2024-08-27T01:42:06.000Z
 updatedDate: 2026-06-09T16:00:00.000Z

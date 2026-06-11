@@ -1,8 +1,8 @@
 ---
 title: LLM 模型使用比較
 description: 依安全隱私、性價比、推理能力、平台便利度四個維度對 2025 年主流 LLM 進行綜合排序。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - llm
   - comparison
@@ -10,8 +10,6 @@ tags:
   - security
   - api
 source: ''
-publish_target: ''
-published_url: ''
 related:
   - LLM 模型使用比較 含平臺方案
 pubDate: 2025-09-11T06:13:33.000Z

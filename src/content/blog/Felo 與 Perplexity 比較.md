@@ -1,16 +1,14 @@
 ---
 title: AI 搜尋工具怎麼選：Felo vs Perplexity 的選擇框架
 description: Felo 與 Perplexity 兩款 AI 搜尋工具的功能對比：多語言支援、搜尋精準度、介面設計與適用場景。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - ai-search
   - felo
   - perplexity
   - tool-comparison
 source: ''
-publish_target: ''
-published_url: ''
 related: []
 pubDate: 2024-12-31T16:00:00.000Z
 updatedDate: 2026-06-09T16:00:00.000Z

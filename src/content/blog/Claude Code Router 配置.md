@@ -1,8 +1,8 @@
 ---
 title: Claude Code Router 配置
 description: Claude Code Router 的模型分流配置策略：按任務類型選擇最佳 model，兼顧成本與品質，包含 ZDR 和零停機容錯方案。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - claude-code
   - router
@@ -10,8 +10,6 @@ tags:
   - llm
   - cost-optimization
 source: ''
-publish_target: ''
-published_url: ''
 related: []
 pubDate: 2025-09-02T02:47:53.000Z
 updatedDate: 2026-06-09T16:00:00.000Z

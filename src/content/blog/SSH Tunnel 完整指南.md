@@ -1,16 +1,14 @@
 ---
 title: SSH Tunnel：所有遠端開發的底層技能
 description: SSH Tunnel 三種模式（Local/Remote/Dynamic）的架構解析與實務指南，涵蓋指令、場景、安全考量與自動重連方案。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - ssh
   - networking
   - security
   - devops
 source: ''
-publish_target: ''
-published_url: ''
 related: []
 pubDate: 2026-03-15T16:00:00.000Z
 updatedDate: 2026-06-09T16:00:00.000Z

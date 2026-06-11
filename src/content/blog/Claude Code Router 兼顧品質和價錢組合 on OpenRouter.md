@@ -3,8 +3,8 @@ title: Claude Code Router 兼顧品質和價錢組合 on OpenRouter
 description: >-
   Claude Code Router 在不強制 ZDR 和強制 ZDR 兩種場景下的 OpenRouter
   模型推薦組合，按任務類型（default/background/think/longContext）選擇最佳模型。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - claude-code
   - router
@@ -13,8 +13,6 @@ tags:
   - zdr
   - cost-optimization
 source: ''
-publish_target: ''
-published_url: ''
 related:
   - Claude Code Router 配置
 pubDate: 2025-09-02T05:36:03.000Z

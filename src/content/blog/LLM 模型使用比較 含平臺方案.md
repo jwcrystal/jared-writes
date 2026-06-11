@@ -1,8 +1,8 @@
 ---
 title: LLM 模型使用比較（含平臺方案）
 description: 主流 LLM API 的價格、平台方案（個人/團隊/企業）及使用場景對比，按性價比排序。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - llm
   - api
@@ -10,8 +10,6 @@ tags:
   - comparison
   - openrouter
 source: ''
-publish_target: ''
-published_url: ''
 related:
   - LLM 模型使用比較
 pubDate: 2025-09-11T06:16:11.000Z

@@ -1,16 +1,14 @@
 ---
 title: System Design Interview by Alex Xu
 description: Alex Xu 系統設計面試書的讀後整理，含 RESHA 框架、書籍結構、八個經典系統案例與學習方法建議。
-type: publish
-status: draft
+type: knowledge
+status: evergreen
 tags:
   - system-design
   - interview
   - architecture
   - learning
 source: ''
-publish_target: ''
-published_url: ''
 related: []
 pubDate: 2026-02-26T08:16:13.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
