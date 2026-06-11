@@ -1,5 +1,5 @@
 ---
-title: Search as Code：架構整理筆記
+title: Search as Code：當搜尋從 API 變成 Agent Runtime
 description: >-
   Perplexity Search as Code（SaC）的概念架構整理：把搜尋從固定 API 變成一組可編程 primitive，讓 LLM
   用程式碼自己組出搜尋流程。
