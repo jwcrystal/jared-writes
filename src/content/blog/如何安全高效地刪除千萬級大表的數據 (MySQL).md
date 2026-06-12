@@ -17,8 +17,6 @@ pubDate: 2025-11-04T02:30:53.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# 如何安全高效地刪除千萬級大表的數據 (MySQL)
-
 > **注意：** 方案一的「分批刪除」思路通用於所有關聯式資料庫。方案二（`RENAME TABLE`）和方案三（`ALTER TABLE ... DROP PARTITION`）是 MySQL 特有語法，PostgreSQL 等需用不同語法（`ALTER TABLE ... RENAME TO`、`DROP TABLE IF EXISTS partition_name`）。
 
 ## 核心摘要

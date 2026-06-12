@@ -14,8 +14,6 @@ pubDate: 2026-04-06T16:00:00.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# OpenChamber Issues 分析報告
-
 ## 核心摘要
 
 OpenChamber（一個 Claude Code 的第三方前端）目前的 50 個 open issues 中，64% 是 bug，其中 **6 個致命級別**（應用崩潰或會話卡死）需要立刻修復。UI 渲染和 PWA 相容性問題佔據中優先級的大宗。整體來看，核心功能（chat、terminal、session 管理）仍不穩定，但功能增強方向（retry、batch archive、health check）有明確的產品價值。

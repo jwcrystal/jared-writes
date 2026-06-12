@@ -17,8 +17,6 @@ pubDate: 2024-01-20T04:47:25.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# MDBOOK Manual
-
 ## 核心摘要
 
 mdBook 是 Rust 生態的文檔生成工具，核心機制是透過 `SUMMARY.md` 定義整本書的章節結構。這個檔案決定了書的目錄、順序、層級——沒有它書就編不出來。格式本質上是一個 Markdown 的巢狀列表，支援 Prefix Chapter、Numbered Chapter、Part Title、Suffix Chapter、Draft Chapter 和 Separator 六種元素。

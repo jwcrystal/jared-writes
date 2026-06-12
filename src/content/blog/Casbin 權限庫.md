@@ -20,8 +20,6 @@ pubDate: 2025-08-14T16:00:00.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# Casbin 權限庫 — PERM 模型與進階規則
-
 ## 核心摘要
 
 Casbin 的設計哲學是**把權限模型和權限策略徹底分離**。你用一個 model.conf 定義「怎麼判斷」（PERM 四層），用一個 policy.csv 定義「誰能做什麼」。這層分離的後果是：同一套授權引擎可以從 ACL 切換到 RBAC 再切換到 ABAC，只改一行 matcher，不用改程式碼。理解 Casbin 不難——難的是把業務需求翻譯成正確的 PERM 結構。

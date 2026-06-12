@@ -18,8 +18,6 @@ pubDate: 2024-09-04T08:16:06.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# Jenkins SSH-Agent on Docker
-
 ## 核心摘要
 
 Jenkins 的 SSH Agent 讓 Master 可以透過 SSH 連接到遠端機器執行 CI job。如果你需要 Ubuntu 環境的 agent（預設只有 Debian-based），可以用 Docker 自建：寫一個 Dockerfile（Ubuntu 20.04 + OpenJDK 17 + SSH server），透過 `JENKINS_AGENT_SSH_PUBKEY` 環境變數注入公鑰，Jenkins 會自動把 `remoting.jar` 複製到 agent 並建立連線。

@@ -19,8 +19,6 @@ pubDate: 2025-08-15T00:48:13.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# GitLab CI/CD Tutorial
-
 ## 核心摘要
 
 GitLab CI/CD 的核心是一個 `.gitlab-ci.yml` 檔案：你在專案根目錄定義好 stages 和 jobs，每次 push 時 GitLab Runner 自動執行。最簡單的 pipeline 只有三步：build → test → deploy。真正的複雜度來自於 keyword 的組合——`rules` 控制觸發條件、`artifacts` 傳遞產出、`needs` 定義依賴關係、`environment` 區分部署目標。

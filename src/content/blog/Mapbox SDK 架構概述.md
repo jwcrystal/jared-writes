@@ -15,8 +15,6 @@ pubDate: 2023-12-31T16:00:00.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# Mapbox Navigation SDK 架構概述
-
 ## 核心摘要
 
 Mapbox Navigation SDK 是一套 Android 導航庫，核心設計圍繞著**觀察者模式 + 狀態機**：`MapboxNavigation` 是中央入口，透過 `TripSession` 管理 FreeDrive / ActiveGuidance / Idle 三個狀態的切換，應用層只需註冊對應的 Observer 就能接收位置、路線、進度、事件等更新。元件的設計讓導航邏輯和 UI 完全解耦，同時內建 HistoryRecorder 和 Telemetry 支援偵錯和數據回報。

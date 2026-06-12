@@ -15,8 +15,6 @@ pubDate: 2025-09-02T02:47:53.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# Claude Code Router 配置
-
 ## 核心摘要
 
 Claude Code Router 讓你根據任務類型（預設、背景、推理、長上下文、搜尋）把請求分流到不同的 LLM model 和 provider。核心價值在最優化 **成本與品質的 trade-off**——預設用性價比高的 Grok Code Fast 1，背景任務用超便宜的 GPT-OSS 20B，高推理切到 Sonnet，長上下文交給 Gemini Flash。ZDR（零資料留存）模式下另有推薦組合。

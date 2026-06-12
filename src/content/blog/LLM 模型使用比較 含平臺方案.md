@@ -16,8 +16,6 @@ pubDate: 2025-09-11T06:16:11.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# LLM 模型使用比較（含平臺方案）
-
 ## 核心摘要
 
 這篇從 API 定價 + 平台付費方案兩個維度比較 2025 年主流的 LLM 選項。如果只看 API token 成本：Gemini Flash ≈ DeepSeek < GLM 4.5 < Qwen3 < GPT-4o < Grok < Claude。但加上平台生態和付費方案之後，排序會變——OpenAI 的 ChatGPT Plus ($20/月) 提供了一定額度的 API 使用量，實際上對個人開發者比直接付 API 更划算。

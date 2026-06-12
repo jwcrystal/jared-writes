@@ -19,8 +19,6 @@ pubDate: 2025-08-14T16:00:00.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# Terraform + Ansible 多雲部署指南
-
 ## 核心摘要
 
 Terraform 和 Ansible 各自解決 IaC 的不同階段：**Terraform 管基礎設施的「有沒有」（有沒有這台機器、這個網路），Ansible 管基礎設施的「對不對」（軟體裝好了嗎、配置正確嗎）**。兩者串聯的關鍵是動態 inventory：Terraform 輸出資源 IP，Ansible 讀取 inventory 去配置它們。這個組合的威力在於：同一套流程可以同時部署 AWS 和 GCP 的機器，不換工具。

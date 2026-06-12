@@ -17,8 +17,6 @@ pubDate: 2026-06-11T00:00:00.000Z
 updatedDate: 2026-06-11T00:00:00.000Z
 ---
 
-# Search as Code：當搜尋從 API 變成 Agent Runtime
-
 ## 核心摘要
 
 Search as Code（SaC）表面上在講搜尋，實際上是給 agent 時代的工具架構提出了新方向：**把搜尋從固定 API 變成一組可編程 primitive，讓 LLM 用程式碼自己組出當前任務需要的搜尋流程**。

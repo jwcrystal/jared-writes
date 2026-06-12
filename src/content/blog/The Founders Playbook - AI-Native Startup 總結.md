@@ -19,8 +19,6 @@ pubDate: 2026-05-27T05:45:50.187Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# The Founder's Playbook — AI-Native Startup 方法論
-
 ## 核心摘要
 
 AI 正在重寫 startup 的基本規則。過去：idea → raise money → hire engineers → build → grow。現在：idea → validate → AI-assisted build → rapid iteration → lean scale。三個核心轉變：**Execution 正在被商品化**（AI 可以 coding/debug/test/maintain）、**Founder 的角色從 builder 轉為 orchestrator**（設計系統、做決策、理解用戶）、**小團隊將極度強大**（1-10 人 + AI infra 可能等於過去 50-200 人公司）。

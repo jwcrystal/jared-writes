@@ -14,8 +14,6 @@ published_url: ''
 pubDate: 2026-06-11T16:00:00.000Z
 updatedDate: 2026-06-11T17:20:00.000Z
 ---
-# 你不是不會寫 Prompt，是不會定義任務
-
 模型從實習生變成 senior partner，你的 prompt 還跟去年一樣的話，問題不在 prompt。
 
 ## 核心摘要

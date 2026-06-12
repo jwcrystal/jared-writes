@@ -17,8 +17,6 @@ pubDate: 2024-08-27T01:42:06.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# Stack Auth：開源身份認證方案評測
-
 ## 為什麼這件事值得看
 
 2025 年做 side project，auth 方案有三條路：Clerk / Auth0（付費 SaaS，省心但貴）、Supabase Auth（跟 Supabase 捆綁）、Stack Auth（開源自託管，資料在你手上）。如果你不想被 vendor lock-in、又想有現成方案不用從零寫——Stack Auth 是第三條路裡最值得看的選擇。

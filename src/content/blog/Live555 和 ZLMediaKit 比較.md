@@ -16,8 +16,6 @@ pubDate: 2025-08-15T00:53:24.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-# Live555 和 ZLMediaKit 比較
-
 ## 核心摘要
 
 Live555 和 ZLMediaKit 都是 C++ 寫的開源流媒體解決方案，但定位完全不同。Live555 是一個**經典的 RTSP 流媒體庫**，適合學術研究和嵌入式設備，協議支援窄（RTSP/RTP）、部署複雜。ZLMediaKit 是**全協議流媒體服務框架**，同時支援 RTSP、RTMP、WebRTC、SRT、GB28181，效能更高、文件更好、授權更寬鬆（MIT），適合商業應用和大規模部署。選 Live555 是因為你被限制在 RTSP only 而且需要極度輕量，其他的都用 ZLMediaKit。
