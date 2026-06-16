@@ -3,8 +3,8 @@ title: CNCF IAM Whitepaper 整理
 description: >-
   CNCF 發佈的 K8s 環境 IAM 白皮書重點整理：兩套參考架構（Basic/Advanced Pattern）、OIDC + PKCE + MFA
   人類身份驗證、SPIFFE Workload 身份、P*P 授權架構。
-type: knowledge
-status: evergreen
+type: publish
+status: draft
 tags:
   - kubernetes
   - security

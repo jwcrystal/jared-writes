@@ -3,8 +3,8 @@ title: GitLab CI/CD Tutorial
 description: >-
   GitLab CI/CD 入門教學：從 .gitlab-ci.yml 的 stages/jobs 定義到 pipeline 執行，核心 keyword
   速查表。
-type: knowledge
-status: evergreen
+type: publish
+status: draft
 tags:
   - gitlab
   - ci-cd
@@ -19,13 +19,9 @@ pubDate: 2025-08-15T00:48:13.000Z
 updatedDate: 2026-06-09T16:00:00.000Z
 ---
 
-## 核心摘要
+GitLab CI/CD 的核心是一個 `.gitlab-ci.yml` 檔案：你在專案根目錄定義好 stages 和 jobs，每次 push 時 GitLab Runner 自動執行。最簡單的 pipeline 只有三步：build → test → deploy。真正的複雜度來自於 keyword 的組合 — `rules` 控制觸發條件、`artifacts` 傳遞產出、`needs` 定義依賴關係、`environment` 區分部署目標。
 
-GitLab CI/CD 的核心是一個 `.gitlab-ci.yml` 檔案：你在專案根目錄定義好 stages 和 jobs，每次 push 時 GitLab Runner 自動執行。最簡單的 pipeline 只有三步：build → test → deploy。真正的複雜度來自於 keyword 的組合——`rules` 控制觸發條件、`artifacts` 傳遞產出、`needs` 定義依賴關係、`environment` 區分部署目標。
-
-## 一句話理解
-
-**一個 `.gitlab-ci.yml` + 一個 Runner = 你每次 push 就自動 build、test、deploy。**
+> **一個 `.gitlab-ci.yml` + 一個 Runner = 你每次 push 就自動 build、test、deploy。**
 
 ## 最小 Pipeline
 
@@ -74,13 +70,13 @@ deploy_job:
 | `when` | 否 | 控制 job 執行時機（manual/on_failure 等） |
 | `retry` | 否 | 失敗自動重試次數 |
 
-## 我的判斷
+## 分析與建議
 
 - GitLab CI 的學習曲線比 GitHub Actions 陡，但功能更完整。最大的差異是 GitLab CI 有內建的 Container Registry、Environment 管理、DAG pipeline（`needs` 關鍵字），而 GitHub Actions 的 marketplace 生態更豐富。
 - `rules` 取代 `only`/`except` 是 GitLab 近年的重要改進。如果你還在使用 `only`，建議遷移到 `rules`，語法更直觀、功能更強。
 - Runner 是整個 CI 系統的瓶頸。如果你用 Shared Runner（GitLab.com 提供的），排隊時間不可控。關鍵專案建議自架 Runner。
 - `.gitlab-ci.yml` 的 YAML 可以透過 `include` 拆分成多個檔案，避免單一檔案膨脹到上千行。
 
-## 最後記住這句
+## 總結
 
 **`.gitlab-ci.yml` 的核心是 stages + jobs + script。其他 key 都是為了更精細地控制「什麼時候跑、跑什麼環境、產出傳到哪裡」。**
