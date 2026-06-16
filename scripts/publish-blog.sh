@@ -127,38 +127,69 @@ rsync "${RSYNC_FLAGS[@]}" \
   --exclude='*' \
   "$ARCHIVE_DIR/" "$TARGET_DIR/"
 
-# Step 3: Resolve missing referenced images from Obsidian vault
-# Obsidian stores images in vault paths like 20-Knowledge/{topic}/assets/{post}/file.png
-# but markdown references them as assets/{post}/file.png (relative to file location)
+# Step 3: Normalize all blog images to src/content/blog/assets/{post-name}/{filename}
+# regardless of the relative path in the original Markdown.
+# Also rewrites Markdown references to use the canonical path.
 OBSIDIAN_VAULT="$(dirname "$(dirname "$SOURCE_DIR")")"
 
 if [[ -d "$OBSIDIAN_VAULT" ]]; then
-  echo "Resolving missing blog images..."
-  while IFS= read -r -d '' md_file; do
-    while IFS= read -r match; do
-      img_rel=$(echo "$match" | sed 's/.*(\(.*\))/\1/')
-      img_decoded=$(python3 -c "import urllib.parse; print(urllib.parse.unquote('$img_rel'))" 2>/dev/null || echo "$img_rel")
-      # Skip external URLs
-      [[ "$img_decoded" =~ ^https?:// ]] && continue
-      md_dir=$(dirname "$md_file")
-      expected_path="$md_dir/$img_decoded"
-      [[ -f "$expected_path" ]] && continue
-      # Search vault for the image by filename
-      img_name=$(basename "$img_decoded")
-      found=$(find "$OBSIDIAN_VAULT" -name "$img_name" -type f 2>/dev/null | head -1)
-      if [[ -n "$found" ]]; then
-        if [[ "$DRY_RUN" == true ]]; then
-          echo "  [DRY RUN] Would copy image: $img_decoded"
-        else
-          mkdir -p "$(dirname "$expected_path")"
-          cp "$found" "$expected_path"
-          echo "  Copied image: $img_decoded"
-        fi
-      else
-        echo "  WARNING: Could not find image in vault: $img_decoded"
-      fi
-    done < <(grep -Eo '!\[[^]]*\]\([^)]+\)' "$md_file" || true)
-  done < <(find "$TARGET_DIR" -name '*.md' -type f -print0)
+  echo "Resolving blog images..."
+  export TARGET_DIR OBSIDIAN_VAULT DRY_RUN
+  python3 -c "
+import os, re, urllib.parse, shutil
+
+target_dir = os.environ['TARGET_DIR']
+vault = os.environ['OBSIDIAN_VAULT']
+dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
+
+for md_file in (f.path for f in os.scandir(target_dir) if f.name.endswith('.md')):
+    post_name = os.path.splitext(os.path.basename(md_file))[0]
+    assets_dir = os.path.join(target_dir, 'assets', post_name)
+
+    with open(md_file, 'r') as f:
+        content = f.read()
+
+    changed = False
+    for m in re.finditer(r'!\[([^\]]*)\]\(([^)]+)\)', content):
+        img_rel = m.group(2)
+        if img_rel.startswith(('http://', 'https://')):
+            continue
+
+        img_decoded = urllib.parse.unquote(img_rel)
+        img_name = os.path.basename(img_decoded)
+        canonical = os.path.join(assets_dir, img_name)
+        new_rel = '../assets/' + urllib.parse.quote(f'{post_name}/{img_name}', safe='')
+
+        # Already uses canonical path — nothing to do
+        if img_rel == new_rel:
+            continue
+
+        # Check if image file is already at canonical location
+        if not os.path.exists(canonical):
+            # Search Obsidian vault
+            found = None
+            for root, dirs, files in os.walk(vault):
+                if img_name in files:
+                    found = os.path.join(root, img_name)
+                    break
+            if not found:
+                print(f'  WARNING: Could not find image in vault: {img_decoded}')
+                continue
+            if not dry_run:
+                os.makedirs(assets_dir, exist_ok=True)
+                shutil.copy2(found, canonical)
+            print(f'  Copied: {img_name} → assets/{post_name}/')
+
+        # Rewrite markdown reference to canonical path
+        if not dry_run:
+            content = content.replace(f'({img_rel})', f'({new_rel})')
+            changed = True
+        print(f'  Rewrote: {img_rel} → {new_rel}')
+
+    if changed:
+        with open(md_file, 'w') as f:
+            f.write(content)
+"
 else
   echo "  Skipped (Obsidian vault not found at $OBSIDIAN_VAULT)"
 fi
