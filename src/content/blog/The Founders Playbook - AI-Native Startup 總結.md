@@ -79,4 +79,4 @@ Founder 從 builder 轉向 executive、GTM leader、governance owner。真正的
 
 **AI-native startup 不是「用 AI 寫 code」，是「用 AI 重新定義 founder 的工作內容」— 你的價值不再是你做了什麼，而是你決定做什麼。**
 
-![](../../20-Knowledge/AI/assets/The%20Founders%20Playbook%20-%20AI-Native%20Startup%20總結/0E11F048-6DB5-4279-AAEA-E842AB102624_1_102_o.jpeg)
+![](./assets/The%20Founders%20Playbook%20-%20AI-Native%20Startup%20總結/0E11F048-6DB5-4279-AAEA-E842AB102624_1_102_o.jpeg)

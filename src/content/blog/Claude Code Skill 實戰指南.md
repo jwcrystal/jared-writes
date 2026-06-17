@@ -58,7 +58,7 @@ my-skill/
 
 Anthropic 盤點內部上百個 skill 後，歸納出 9 種最常見的類型。一條好用的原則是：**一個 skill 只做一類**。跨太多類反而會讓 agent 混淆。
 
-![9 種 Claude Code Skill 類型](../assets/Claude%20Code%20Skill%20實戰指南/claude-code-skill-9-types.jpeg)
+![9 種 Claude Code Skill 類型](./assets/Claude%20Code%20Skill%20實戰指南/claude-code-skill-9-types.jpeg)
 
 | # | 類型 | 核心用途 | 適合誰做 |
 |---|------|----------|----------|
@@ -80,7 +80,7 @@ Anthropic 盤點內部上百個 skill 後，歸納出 9 種最常見的類型。
 
 任何 skill 裡訊號最高的內容是 Gotchas——告訴 Claude「哪些地方容易踩坑」。這些往往是文件不寫、但你被坑過才知道的細節。例如：
 
-![Claude Code Skill 的 Gotchas 設計重點](../assets/Claude%20Code%20Skill%20實戰指南/claude-code-skill-gotchas.jpeg)
+![Claude Code Skill 的 Gotchas 設計重點](./assets/Claude%20Code%20Skill%20實戰指南/claude-code-skill-gotchas.jpeg)
 
 - 「`subscriptions` table 是 append-only，你要的是 version 最高的那列，不是 `created_at` 最新的」
 - 「這個欄位在 API gateway 叫 `@request_id`，在 billing service 叫 `trace_id`，是同一個值」
