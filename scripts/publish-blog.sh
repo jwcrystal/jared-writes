@@ -158,7 +158,7 @@ for md_file in (f.path for f in os.scandir(target_dir) if f.name.endswith('.md')
         img_decoded = urllib.parse.unquote(img_rel)
         img_name = os.path.basename(img_decoded)
         canonical = os.path.join(assets_dir, img_name)
-        new_rel = '../assets/' + urllib.parse.quote(f'{post_name}/{img_name}', safe='')
+        new_rel = './assets/' + urllib.parse.quote(f'{post_name}/{img_name}')
 
         # Already uses canonical path — nothing to do
         if img_rel == new_rel:
